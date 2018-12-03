@@ -1,13 +1,18 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 //import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 //import com.mysql.cj.jdbc.result.ResultSetImpl;
 
+import com.mysql.cj.jdbc.result.ResultSetImpl;
+
 public class foodTruckRegistration {
+	public int TruckId;
+	public String TruckName;
 	public String FromDate;
 	public String ToDate;
 	public int DaysOption;
@@ -26,9 +31,26 @@ public class foodTruckRegistration {
 	public void truckRegistration() throws ClassNotFoundException, SQLException
 	{	
 		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema","root","123456789");
-		Statement stmt = con.createStatement();
 		PreparedStatement preparedStmt;
+		java.sql.Statement stmt = con.createStatement();
 		Scanner Sc = new Scanner(System.in);
+		System.out.println("Please enter Food Truck Name");
+		TruckName = Sc.nextLine();
+		String Query = 
+				"Insert into truck_owner_tab "
+				+ "(`LoginType`,`LoginId`, `TruckName`, `ApprovedFlag`) "
+				+ "VALUES (?,?,?,?)";
+				preparedStmt = con.prepareStatement(Query);
+				preparedStmt.setString (1,"O" );
+				preparedStmt.setString (2,"rahulanrahul" );
+				preparedStmt.setString (3,TruckName );
+				preparedStmt.setInt (4,0 );
+				preparedStmt.execute();
+		
+		ResultSet rs = stmt.executeQuery("Select * from truck_owner_tab where LoginType = 'O' and LoginId = 'rahulanrahul' and TruckName = '"+TruckName+"'");		
+		while(((ResultSetImpl) rs).next()) 
+			TruckId = ((ResultSetImpl) rs).getInt(1);
+		
 		do
 		{
 		System.out.println("Please enter From Date:(YYYY-MM-DD)");
@@ -117,21 +139,23 @@ public class foodTruckRegistration {
 					+ "Press any other number to continue");
 			KeyEntry = Sc.nextInt();
 		}while(KeyEntry == 1);
-		String Query = 
+		Query = "";
+		Query = 
 		"INSERT INTO food_truck_tab "
-		+ "(`FromDate`, `ToDate`, `Days`, `TimeSlot1`, `TimeSlot2`, `TimeSlot3`, "
+		+ "(`TruckId`,`FromDate`, `ToDate`, `Days`, `TimeSlot1`, `TimeSlot2`, `TimeSlot3`, "
 		+ "`Location1`, `Location2`, `Location3`) "
-		+ "VALUES (?,?,?,?,?,?,?,?,?)";
+		+ "VALUES (?,?,?,?,?,?,?,?,?,?)";
 		preparedStmt = con.prepareStatement(Query);
-		preparedStmt.setString (1,FromDate );
-		preparedStmt.setString (2,ToDate );
-		preparedStmt.setString (3,Days );
-		preparedStmt.setString (4,TimeSlot1 );
-		preparedStmt.setString (5,TimeSlot2 );
-		preparedStmt.setString (6,TimeSlot3 );
-		preparedStmt.setString (7,Location1 );
-		preparedStmt.setString (8,Location2 );
-		preparedStmt.setString (9,Location3 );
+		preparedStmt.setInt (1,TruckId );
+		preparedStmt.setString (2,FromDate );
+		preparedStmt.setString (3,ToDate );
+		preparedStmt.setString (4,Days );
+		preparedStmt.setString (5,TimeSlot1 );
+		preparedStmt.setString (6,TimeSlot2 );
+		preparedStmt.setString (7,TimeSlot3 );
+		preparedStmt.setString (8,Location1 );
+		preparedStmt.setString (9,Location2 );
+		preparedStmt.setString (10,Location3 );
 		try {
 		preparedStmt.execute();
 		}catch(SQLException ex){
