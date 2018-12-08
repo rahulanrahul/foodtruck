@@ -37,8 +37,8 @@ public class searchByLocation {
 					+ "food_truck_tab.TimeSlot3, food_truck_tab.Location3, truck_owner_tab.TruckId "
 					+ "From truck_owner_tab "
 					+ "inner join food_truck_tab on truck_owner_tab.TruckId = food_truck_tab.TruckId "
-					+ "where( ( Location1 = '" + TruckLocation + "' ) OR ( Location2 = '" + TruckLocation
-					+ "' ) OR (Location3 = '" + TruckLocation + "') )");
+					+ "where( ( ( Location1 = '" + TruckLocation + "' ) OR ( Location2 = '" + TruckLocation
+					+ "' ) OR (Location3 = '" + TruckLocation + "') ) AND ( ApprovedFlag = '1' ) )");
 			int nCol = result.getMetaData().getColumnCount();
 			count = 0;
 			List<String[]> table = new ArrayList<>();
