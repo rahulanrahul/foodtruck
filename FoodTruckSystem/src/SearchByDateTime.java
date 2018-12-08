@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class searchByDateAndTime {
-
-	String TruckLocation;
 	String SelectedRow;
 	int TruckId;
 	int size;
