@@ -80,8 +80,8 @@ public class searchByDateAndTime {
 					+ "From truck_owner_tab "
 					+ "inner join food_truck_tab on truck_owner_tab.TruckId = food_truck_tab.TruckId "
 					+ "where( ( TimeSlot1 = '" + TimeSlot + "' ) OR ( TimeSlot2 = '" + TimeSlot
-					+ "' ) OR ( TimeSlot3 = '" + TimeSlot + "' ) ) AND ( FromDate <= '" + Date + "' ) AND ( ToDate >= '"
-					+ Date + "' )");
+					+ "' ) OR ( TimeSlot3 = '" + TimeSlot + "' ) ) AND ( ( FromDate <= '" + Date
+					+ "' ) AND ( ToDate >= '" + Date + "' ) ) AND ApprovedFlag = '1'");
 			int nCol = result.getMetaData().getColumnCount();
 			count = 0;
 			List<String[]> table = new ArrayList<>();
