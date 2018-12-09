@@ -13,7 +13,7 @@ public class foodMenu {
 	String Dish;
 	String Price;
 
-	public void foodMenu() throws ClassNotFoundException, SQLException {
+	public void insertFoodMenu() throws ClassNotFoundException, SQLException {
 		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema?useSSL=false",
 				"root", "lenovopc.3");
 		Statement stmt = con.createStatement();
