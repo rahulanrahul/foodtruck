@@ -60,10 +60,11 @@ public class searchByLocation {
 				for (String[] row : table) {
 					for (String s : row) {
 						i++;
-						if (i != (size))
+						if (i != (size)){
 							if (s != null) {
 							System.out.print(s + " ");
 							}	
+						}	
 					}
 					i = 0;
 					System.out.println();
