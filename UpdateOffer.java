@@ -13,13 +13,13 @@ public class UpdateOffer {
 	
 	
 	public static void main(String[] args){
-		 int truckId;
+	     int truckId;
 	     String foodType;
 	     String day;
 	     String timeSlot;
-		 String offer;
-		 String from;
-		 String to;
+             String offer;
+	     String from;
+	     String to;
 		
 		int choice = 100;
 		try{
