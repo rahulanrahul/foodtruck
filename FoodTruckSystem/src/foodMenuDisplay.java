@@ -8,13 +8,13 @@ import java.util.*;
 
 
 public class foodMenuDisplay {
-	int TruckId;
+	
 	String foodtype2;
 	String dish;
 	String price;
 	int no = 0, Flag = 0, userChoice;
 
-	public void foodMenuDisplay() throws ClassNotFoundException, SQLException {
+	public void displayFoodMenu() throws ClassNotFoundException, SQLException {
 		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema?useSSL=false",
 				"root", "lenovopc.3");
 		java.sql.Statement stmt = con.createStatement();
