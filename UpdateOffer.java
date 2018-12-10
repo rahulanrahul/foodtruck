@@ -13,15 +13,15 @@ public class UpdateOffer {
 	
 	
 	public static void main(String[] args){
-	     int truckId;
+		 int truckId;
 	     String foodType;
 	     String day;
 	     String timeSlot;
-             String offer;
-	     String from;
-	     String to;
+		 String offer;
+		 String from;
+		 String to;
 		
-		int choice = 100;
+		String choice ;
 		try{
 				Scanner scanner = new Scanner(System.in);
 				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema","root","desertstrom47007");
@@ -41,6 +41,7 @@ public class UpdateOffer {
 											"From Date: " +rs.getString("fromdate") + "\n"+
 											"To Date: " +rs.getString("todate") );
 }
+				boolean isloopneeded;
 				do{
 					System.out.println("MENU" + "\n" +
 														"1. Delete" + "\n" +
@@ -51,16 +52,17 @@ public class UpdateOffer {
 														"6. Change FromDate" + "\n" +
 														"7. Change ToDate" + "\n" +
 														"0. Exit");
-				choice = scanner.nextInt();
-				
+				choice = scanner.next();
+			
+				isloopneeded = false;
 				switch(choice){
-					case 1: {
+					case "1": {
 						
 						preparedStmt = con.prepareStatement("Delete * from truck_offer_tab where TruckId ='"+ truckId+"'");	
 						preparedStmt.executeUpdate();					
 						break;
 					}
-					case 2: {
+					case "2": {
 					
 						System.out.println("Please provide Food Type: " );
 						foodType = scanner.next();
@@ -68,7 +70,7 @@ public class UpdateOffer {
 						preparedStmt.executeUpdate();					
 						break;
 					}
-					case 3: {
+					case "3": {
 					
 						System.out.println("Please provide Day: " );
 						day = scanner.next();
@@ -76,7 +78,7 @@ public class UpdateOffer {
 						preparedStmt.executeUpdate();					
 						break;
 					}
-					case 4: {
+					case "4": {
 						
 						System.out.println("Please provide Timeslot : " );
 						timeSlot = scanner.next();
@@ -84,7 +86,7 @@ public class UpdateOffer {
 						preparedStmt.executeUpdate();					
 						break;
 					}
-					case 5: {
+					case "5": {
 						
 						System.out.println("Please provide offer : " );
 						offer = scanner.next();
@@ -92,7 +94,7 @@ public class UpdateOffer {
 						preparedStmt.executeUpdate();					
 						break;
 					}
-					case 6: {
+					case "6": {
 						
 						System.out.println("Please provide From Date: " );
 						from = scanner.next();
@@ -100,7 +102,7 @@ public class UpdateOffer {
 						preparedStmt.executeUpdate();					
 						break;
 					}
-					case 7: {
+					case "7": {
 					
 						System.out.println("Please provide To Day: " );
 						to = scanner.next();
@@ -108,15 +110,17 @@ public class UpdateOffer {
 						preparedStmt.executeUpdate();					
 						break;
 					}
-					case 0:{
+					case "0":{
 						System.out.println("Bye");
 						break;
 					}
 					default:{
+						isloopneeded = true;
 						System.out.println("Wrong choice");
+						break;
 					}					
 				}
-				} while(choice != 0);
+				} while(isloopneeded);
 		}
 		catch (Exception e){
       		System.err.println("Got an exception! \n" + e);
