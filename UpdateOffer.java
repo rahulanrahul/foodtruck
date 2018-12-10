@@ -80,7 +80,8 @@ public class UpdateOffer {
 					}
 					case "4": {
 						
-						System.out.println("Please provide Timeslot : " );
+							
+						System.out.println("Please provide Timeslot :(From-To)" );
 						timeSlot = scanner.next();
 						preparedStmt = con.prepareStatement("update truck_offer_tab set timeslot ='" + timeSlot + "' where TruckId ='"+truckId+"'");	
 						preparedStmt.executeUpdate();					
@@ -88,7 +89,7 @@ public class UpdateOffer {
 					}
 					case "5": {
 						
-						System.out.println("Please provide offer : " );
+						System.out.println("Please provide number of offers : " );
 						offer = scanner.next();
 						preparedStmt = con.prepareStatement("update truck_offer_tab set offer ='" + offer + "' where TruckId ='"+truckId+"'");	
 						preparedStmt.executeUpdate();					
@@ -96,7 +97,7 @@ public class UpdateOffer {
 					}
 					case "6": {
 						
-						System.out.println("Please provide From Date: " );
+						System.out.println("Please provide From Date:(YYYY-MM-DD) " );
 						from = scanner.next();
 						preparedStmt = con.prepareStatement("update truck_offer_tab set fromdate ='" + from + "' where TruckId ='"+truckId+"'");	
 						preparedStmt.executeUpdate();					
@@ -104,7 +105,7 @@ public class UpdateOffer {
 					}
 					case "7": {
 					
-						System.out.println("Please provide To Day: " );
+						System.out.println("Please provide To Day:(YYYY-MM-DD) " );
 						to = scanner.next();
 						preparedStmt = con.prepareStatement("update truck_offer_tab set todate ='" + to + "' where TruckId ='"+truckId+"'");	
 						preparedStmt.executeUpdate();					
