@@ -5,8 +5,11 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import BookAndCheckAppointment.BookAppointment;
+import BookAndCheckAppointment.CheckAppointment;
 import FeedBack.GetFeedback;
 import FeedBack.GiveFeedback;
+import Offers.AddOffer;
+import Offers.ViewOffer;
 import Registration.ApprovalOfFoodTruck;
 import Registration.FoodTruckRegistration;
 import Registration.LoginWithVerification;
@@ -15,6 +18,7 @@ import Search.searchByDateAndTime;
 import Search.searchByLocation;
 import Search.searchByMenu;
 import Search.searchByName;
+import Updates.UpdateTruckSchedule;
 import menu.UpdateTruckMenu;
 import menu.foodMenu;
 import menu.foodMenuDisplay;
@@ -25,30 +29,31 @@ public class MainFlow {
 		int RegistrationSuccessFlag = 0;
 		int SelectedTruck = 0;
 		String FeedbackPermission;
-		int returnFromSubMenu=0;
+		int returnFromSubMenu = 0;
 
 		int ReturnFromApproval = 0;
 		Scanner Sc = new Scanner(System.in);
-		System.out.println("\t================================ ");
-		System.out.println("  \t WelCome To Food Truck System");
-		System.out.println("\t================================ ");
+		System.out.println("================================ ");
+		System.out.println("WelCome To Food Truck System");
+		System.out.println("================================ ");
 		do {
-			int CharacterCheckFlag;
+			boolean CharacterCheckFlag = false;
 			do {
-				CharacterCheckFlag = 0;
-				System.out.println("\n\t***Select From Following Option***");
-				System.out.println("\t1. User Registeration");
-				System.out.println("\t2. Login");
-				System.out.println("\t0. Exit");
+				CharacterCheckFlag = false;
+				System.out.println("***Select From Following Option***");
+				System.out.println("1. User Registeration");
+				System.out.println("2. Login");
+				System.out.println("0. Exit");
 				try {
+					CharacterCheckFlag = false;
 					Option = Sc.nextInt();
-					CharacterCheckFlag = 0;
+					
 				} catch (InputMismatchException Ex) {
 
 					System.out.println("Character's Not Allowed");
-					CharacterCheckFlag = 1;
+					CharacterCheckFlag = true;
 				}
-			} while (CharacterCheckFlag == 1);
+			} while (CharacterCheckFlag);
 			switch (Option) {
 			case 1:
 				Registration Register = new Registration();
@@ -64,11 +69,11 @@ public class MainFlow {
 					LoginPage.Login();
 					if (LoginPage.LoginType.equalsIgnoreCase("A")) {
 						do {
-							System.out.println("\n\tWelcome Admin: " + LoginPage.FirstNameFromDB);
-							CharacterCheckFlag = 0;
+							System.out.println("Welcome Admin: " + LoginPage.FirstNameFromDB);
+							CharacterCheckFlag = false;
 							do {
-								System.out.println("\n\tPress 1 To Start Approvals");
-								System.out.println("\n\tPress 0 To Exit");
+								System.out.println("Press 1 To Start Approvals");
+								System.out.println("Press 0 To Exit");
 								String AdminChoise = Sc.next();
 								if ((LoginPage.LoginType.equalsIgnoreCase("A")) && (AdminChoise.equals("1"))) {
 									ApprovalOfFoodTruck Approve = new ApprovalOfFoodTruck();
@@ -77,20 +82,23 @@ public class MainFlow {
 									System.out.println("Visit Again...");
 									System.exit(0);
 								} else {
-									System.out.println("\n\tOther Character not Allowed...");
-									CharacterCheckFlag = 1;
+									System.out.println("Other Character not Allowed...");
+									CharacterCheckFlag = true;
 								}
 							} while (ReturnFromApproval == 1);
-						} while (CharacterCheckFlag == 1);
+						} while (CharacterCheckFlag);
 					} else if (LoginPage.LoginType.equalsIgnoreCase("O")) {
 						System.out.println("Welcome " + LoginPage.FirstNameFromDB);
 						do {
-							System.out.println("\n\tSelect From Following Option");
-							System.out.println("\n\t1. Food Truck Registration");
-							System.out.println("\n\t2. Enter Food Menu ");
-							System.out.println("\n\t3. Update Food Menu ");
-							System.out.println("\n\t4. See the FeedBack ");
-							System.out.println("\n\t0. Exit");
+							System.out.println("Select From Following Option");
+							System.out.println("1. Food Truck Registration");
+							System.out.println("2. Enter Food Menu ");
+							System.out.println("3. Update Food Menu ");
+							System.out.println("4. View the Appointment  ");
+							System.out.println("5. Add Food Offers  ");
+							System.out.println("6. View the FeedBack ");
+							System.out.println("7. Update Schedule ");
+							System.out.println("0. Exit");
 
 							String TruckOwnerOption = Sc.next();
 							if (TruckOwnerOption.equals("1")) {
@@ -114,18 +122,37 @@ public class MainFlow {
 
 									e.printStackTrace();
 								}
-							}else if (TruckOwnerOption.equals("3")) {
+							} else if (TruckOwnerOption.equals("3")) {
 								UpdateTruckMenu Updatemenu = new UpdateTruckMenu();
 								try {
 
-									ReturnFromApproval=Updatemenu.UpdateFoodMenu();
+									ReturnFromApproval = Updatemenu.UpdateFoodMenu();
+								} catch (ClassNotFoundException e) {
+
+									e.printStackTrace();
+								}
+							} else if (TruckOwnerOption.equals("4")) {
+								CheckAppointment ViewAppt = new CheckAppointment();
+								try {
+
+									ReturnFromApproval = ViewAppt.ViewAppointmentdata();
 								} catch (ClassNotFoundException e) {
 
 									e.printStackTrace();
 								}
 							}
 
-							else if (TruckOwnerOption.equals("4")) {
+							else if (TruckOwnerOption.equals("5")) {
+								AddOffer AddFoodOffers = new AddOffer();
+								try {
+									ReturnFromApproval = AddFoodOffers.foodOffer();
+
+								} catch (ClassNotFoundException e) {
+
+									e.printStackTrace();
+								}
+
+							} else if (TruckOwnerOption.equals("6")) {
 								GetFeedback ShowFeedBack = new GetFeedback();
 								try {
 
@@ -134,24 +161,35 @@ public class MainFlow {
 
 									e.printStackTrace();
 								}
+
+							} else if (TruckOwnerOption.equals("7")) {
+								UpdateTruckSchedule UpdateSchedule = new UpdateTruckSchedule();
+								try {
+
+									ReturnFromApproval = UpdateSchedule.UpdateSchedule();
+								} catch (ClassNotFoundException e) {
+
+									e.printStackTrace();
+								}
+
 							} else if (TruckOwnerOption.equals("0")) {
-								System.out.println("\n\t Visit Again...");
+								System.out.println("Visit Again...");
 								System.exit(0);
 							} else {
-								System.out.println("\n\tOther Character not Allowed...\n Select From The Displayed Menu");
-								CharacterCheckFlag = 1;
+								System.out.println("Other Character not Allowed...\n Select From The Displayed Menu");
+								CharacterCheckFlag = true;
 							}
-						} while (ReturnFromApproval == 1|| CharacterCheckFlag == 1);
+						} while (ReturnFromApproval == 1 || CharacterCheckFlag == true);
 
 					} else {
 						do {
-							System.out.println("\n\tWelcome " + LoginPage.FirstNameFromDB);
-							System.out.println("\n\tSelect From Following Option");
-							System.out.println("\n\t1.Search By Name ");
-							System.out.println("\n\t2.Search By Location ");
-							System.out.println("\n\t3.Search By Date And Time ");
-							System.out.println("\n\t4.Search By Menu ");
-							System.out.println("\n\t0.Exit ");
+							System.out.println("Welcome " + LoginPage.FirstNameFromDB);
+							System.out.println("Select From Following Option");
+							System.out.println("1.Search By Name ");
+							System.out.println("2.Search By Location ");
+							System.out.println("3.Search By Date And Time ");
+							System.out.println("4.Search By Menu ");
+							System.out.println("0.Exit ");
 							String CustomerChoise = Sc.next();
 							if (CustomerChoise.equals("1")) {
 								searchByName SearchFootTruckByName = new searchByName();
@@ -189,7 +227,7 @@ public class MainFlow {
 									e.printStackTrace();
 								}
 
-							}   else if (CustomerChoise.equals("5")) {
+							} else if (CustomerChoise.equals("5")) {
 								searchByMenu MenuSearch = new searchByMenu();
 								try {
 									foodMenuDisplay FoodDisplayMenu = new foodMenuDisplay();
@@ -197,69 +235,77 @@ public class MainFlow {
 								} catch (ClassNotFoundException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
-								}}
-								if(SelectedTruck>0) {
-									do {
-									
-									System.out.println("\n\tSelect From Following ");
-									System.out.println("\n\t1.View Menu ");
-									System.out.println("\n\t2.Book Appointment ");
-									System.out.println("\n\t3.Give Feedback ");
-									System.out.println("\n\t0.Exit ");
-									String SelectedSubMenu = Sc.next();
-								if (SelectedSubMenu.equals("1")) {
-									foodMenuDisplay ViewMenu = new foodMenuDisplay();
-									try {
-										//FeedbackPermission = Sc.next().toUpperCase();
-										returnFromSubMenu = ViewMenu.DisplayMenu(SelectedTruck);
-										} catch (ClassNotFoundException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-
 								}
-								else if (SelectedSubMenu.equals("2")) {
-									BookAppointment BookAppt = new BookAppointment();
-									try {
-										//FeedbackPermission = Sc.next().toUpperCase();
-										BookAppt.BookAppointmentInput(SelectedTruck,LoginPage.NameFromDB);
-									} catch (ClassNotFoundException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-
-								}else if (SelectedSubMenu.equals("3")) {
-									GiveFeedback FeedbackFromCustomer = new GiveFeedback();
-									try {
-										ReturnFromApproval = FeedbackFromCustomer.CustomerFeedback(SelectedTruck);
-									} catch (ClassNotFoundException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-
-								}else if (SelectedSubMenu.equals("0")) {
-									System.out.println("\n\t Visit Again...");
-									System.exit(0);
-
-								}
-									}while(returnFromSubMenu!=0);
-							} 
-						else if (CustomerChoise.equals("0")) {
-								System.out.println("\n\t Visit Again...");
-								System.exit(0);
 							}
-							else {
-								System.out.println("\n\tOther Character not Allowed...");
-								CharacterCheckFlag = 1;
-							}					
-													
-							} while (ReturnFromApproval == 1);
+							if (SelectedTruck > 0) {
+								do {
+
+									System.out.println("Select From Following ");
+									System.out.println("1.View Menu ");
+									System.out.println("2.Book Appointment ");
+									System.out.println("3.View Offer ");
+									System.out.println("4.Give Feedback ");
+									System.out.println("0.Exit ");
+									String SelectedSubMenu = Sc.next();
+									if (SelectedSubMenu.equals("1")) {
+										foodMenuDisplay ViewMenu = new foodMenuDisplay();
+										try {
+											// FeedbackPermission = Sc.next().toUpperCase();
+											returnFromSubMenu = ViewMenu.DisplayMenu(SelectedTruck);
+										} catch (ClassNotFoundException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
+									} else if (SelectedSubMenu.equals("2")) {
+										BookAppointment BookAppt = new BookAppointment();
+										try {
+											// FeedbackPermission = Sc.next().toUpperCase();
+											BookAppt.BookAppointmentInput(SelectedTruck, LoginPage.NameFromDB);
+										} catch (ClassNotFoundException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
+									} else if (SelectedSubMenu.equals("3")) {
+										ViewOffer FoodOffers = new ViewOffer();
+										try {
+											ReturnFromApproval = FoodOffers.foodOfferDisplay(SelectedTruck);
+										} catch (ClassNotFoundException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
+									} else if (SelectedSubMenu.equals("4")) {
+										GiveFeedback FeedbackFromCustomer = new GiveFeedback();
+										try {
+											ReturnFromApproval = FeedbackFromCustomer.CustomerFeedback(SelectedTruck);
+										} catch (ClassNotFoundException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
+									} else if (SelectedSubMenu.equals("0")) {
+										System.out.println("Visit Again...");
+										System.exit(0);
+
+									}
+								} while (returnFromSubMenu != 0);
+							} else if (CustomerChoise.equals("0")) {
+								System.out.println("Visit Again...");
+								System.exit(0);
+							} else {
+								System.out.println("Other Character not Allowed...");
+								CharacterCheckFlag = true;
+							}
+
+						} while (ReturnFromApproval == 1);
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 
-			}//endswitch
-		} while (RegistrationSuccessFlag == 1);//Strat with Registration
+			}// endswitch
+		} while (RegistrationSuccessFlag == 1);// Strat with Registration
 	}
 }
