@@ -58,7 +58,7 @@ public class UpdateOffer {
 				switch(choice){
 					case "1": {
 						
-						preparedStmt = con.prepareStatement("Delete * from truck_offer_tab where TruckId ='"+ truckId+"'");	
+						preparedStmt = con.prepareStatement("Delete from truck_offer_tab where TruckId ='"+ truckId+"'");	
 						preparedStmt.executeUpdate();					
 						break;
 					}
