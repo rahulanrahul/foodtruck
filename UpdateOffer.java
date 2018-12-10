@@ -13,15 +13,14 @@ public class UpdateOffer {
 	
 	
 	public static void main(String[] args){
-		 int truckId;
+	     int truckId;
 	     String foodType;
 	     String day;
 	     String timeSlot;
-		 String offer;
-		 String from;
-		 String to;
-		
-		String choice ;
+	     String offer;
+	     String from;
+	     String to;
+	     String choice ;
 		try{
 				Scanner scanner = new Scanner(System.in);
 				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema","root","desertstrom47007");
@@ -32,7 +31,8 @@ public class UpdateOffer {
 				String q = "Select * from truck_offer_tab where TruckId ='"+ truckId+"'";
 				preparedStmt = con.prepareStatement(q);	
 				ResultSet rs = preparedStmt.executeQuery(q);
-				while(rs.next()){
+				while(rs.next())
+				{
 					System.out.println("Truck ID: " +truckId+ "\n"+
 										"Food Type: " +rs.getString("foodtype") + "\n"+
 											"Day: " +rs.getString("day") + "\n"+
@@ -40,7 +40,7 @@ public class UpdateOffer {
 											"Offer: " +rs.getString("offer") + "\n"+
 											"From Date: " +rs.getString("fromdate") + "\n"+
 											"To Date: " +rs.getString("todate") );
-}
+                                }
 				boolean isloopneeded;
 				do{
 					System.out.println("MENU" + "\n" +
