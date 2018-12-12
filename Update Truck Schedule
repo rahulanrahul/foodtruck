@@ -1,4 +1,5 @@
-package sample;
+package Updates;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,7 +9,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class UpdateTruckSchedule {
-	
+
 	public static int TruckId;
 	public static String fromdate;
 	public static String todate;
@@ -27,97 +28,105 @@ public class UpdateTruckSchedule {
 	String[] arraylocation1 = new String[9999];
 	String[] arraylocation2 = new String[9999];
 	String[] arraylocation3 = new String[9999];
-	
-	public void UpdateSchedule() throws ClassNotFoundException, SQLException
-	{
+	boolean CorrectTruckName = false;
+
+	public int UpdateSchedule() throws ClassNotFoundException, SQLException {
 		try {
 			Scanner Sc = new Scanner(System.in);
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","June1405");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_system", "root",
+					"Abhi08338@");
 			PreparedStatement preparedStmt;
-			Statement stmt = con.createStatement();	
-			System.out.println("Please provide TruckId " );	
-				
+			Statement stmt = con.createStatement();
+			// do {
+			System.out.println("Enter the Food Truck Name:");
+			String TruckName = Sc.next();
+			ResultSet result = stmt.executeQuery("SELECT * FROM truck_owner_tab where TruckName ='" + TruckName + "'");
+			while (result.next()) {
+				int ApprovedFlag = result.getInt(5);
+				TruckId = result.getInt(3);
+			}
+			flagsql = 0;
+			String sql = "SELECT * FROM food_truck_tab where TruckId ='" + TruckId + "' ";
+			ResultSet resultSet = stmt.executeQuery(sql);
+
+			if (resultSet.next()) {
+				do {
+					i = i + 1;
+					arraytruckid[i] = resultSet.getString("TruckId");
+					arrayfromdate[i] = resultSet.getString("FromDate");
+					arraytodate[i] = resultSet.getString("ToDate");
+					arraydays[i] = resultSet.getString("Days");
+					arraytimeslot1[i] = resultSet.getString("TimeSlot1");
+					arraytimeslot2[i] = resultSet.getString("TimeSlot2");
+					arraytimeslot3[i] = resultSet.getString("TimeSlot3");
+					arraylocation1[i] = resultSet.getString("Location1");
+					arraylocation2[i] = resultSet.getString("Location2");
+					arraylocation3[i] = resultSet.getString("Location3");
+					System.out.print(+i + "\tTruckId: " + TruckId + "\tFromDate: " + arrayfromdate[i] + "\tToDate: "
+							+ arraytodate[i] + "\tDays: " + arraydays[i]);
+					if(arraytimeslot1[i] != null) 
+						System.out.print("\tTimeSlot1: " + arraytimeslot1[i]+ "\tLocation1: " + arraylocation1[i]);
 					
-					TruckId = Sc.nextInt();
-					flagsql = 0;
-					String sql = "SELECT * FROM food_truck_tab where TruckId ='"+ TruckId+"' ";
-					ResultSet  resultSet = stmt.executeQuery(sql);
+					if(arraytimeslot2[i] != null)
+						System.out.print("\tTimeSlot2: " + arraytimeslot2[i]+ "\tLocation2: " + arraylocation2[i]);
 					
-					 if (resultSet.next())
-					 { 
-						 do {
-							 i = i + 1;
-							 arraytruckid[i] = resultSet.getString("TruckId");
-							 arrayfromdate[i] = resultSet.getString("FromDate");
-							 arraytodate[i] = resultSet.getString("ToDate");
-							 arraydays[i] = resultSet.getString("Days");
-							 arraytimeslot1[i] = resultSet.getString("TimeSlot1");
-							 arraytimeslot2[i] = resultSet.getString("TimeSlot2");
-							 arraytimeslot3[i] = resultSet.getString("TimeSlot3");
-							 arraylocation1[i] = resultSet.getString("Location1");
-							 arraylocation2[i] = resultSet.getString("Location2");
-							 arraylocation3[i] = resultSet.getString("Location3");
-							 System.out.println( +i+ "\tTruckId: " +TruckId+
-									                 "\tFromDate: " +arrayfromdate[i]+
-									                 "\tToDate: " +arraytodate[i]+
-									                 "\tDays: " +arraydays[i]+
-									                 "\tTimeSlot1: " +arraytimeslot1[i]+
-									                 "\tTimeSlot2: " +arraytimeslot2[i]+
-									                 "\tTimeSlot3: " +arraytimeslot3[i]+
-									                 "\tLocation1: " +arraylocation1[i]+
-									                 "\tLocation2: " +arraylocation2[i]+
-									                 "\tLocation3: " +arraylocation3[i]    
-									 );			 
-							 
-						 }while(resultSet.next());						 
-					 }
-					 else { System.out.println("Your truck does not have any schedule");						 
-					 }	
-					 
-					 
-					 this.UpdateScheduleData();		 
-			 
-					
-						
-		}catch(Exception e)  {
-			 e.printStackTrace(); }
+					if(arraytimeslot3[i] != null)
+						System.out.print("\tTimeSlot3: " + arraytimeslot3[i]+ "\tLocation3: " + arraylocation3[i]+"\n");
+//					
+//					
+//					+ "\tTimeSlot1: " + arraytimeslot1[i]
+//							+ "\tTimeSlot2: " + arraytimeslot2[i] + "\tTimeSlot3: " + arraytimeslot3[i]
+//							+ "\tLocation1: " + arraylocation1[i] + "\tLocation2: " + arraylocation2[i]
+//							+ "\tLocation3: " + arraylocation3[i]);
+				} while (resultSet.next());
+				this.UpdateScheduleData();
+			} else {
+				System.out.println("Your truck does not have any schedule");
+				CorrectTruckName = true;
+			}
+			// }while(CorrectTruckName);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 1;
 	}
-	public void UpdateScheduleData() throws ClassNotFoundException, SQLException
-	{
+
+	public void UpdateScheduleData() throws ClassNotFoundException, SQLException {
 		Scanner Sc = new Scanner(System.in);
 		String Sql2;
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","June1405");
+		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_system", "root",
+				"Abhi08338@");
 		PreparedStatement preparedStmt;
 		int flag;
 		do {
-			System.out.println("Please press C to change or press D to delete an entry"); 
+			System.out.println("\nPlease press C to change or press D to delete an entry");
 			userchoice = Sc.next();
 			flag = 0;
-			switch (userchoice)
-			{
-			case "C":				
+			switch (userchoice) {
+			case "C":
 				this.UpdateTimeslot();
-				break;			
+				break;
 			case "D":
 				System.out.println("Please provide the entry number");
 				i = Sc.nextInt();
-				preparedStmt = con.prepareStatement("Delete from food_truck_tab  where TruckId ='"+ TruckId+"' and FromDate ='"+arrayfromdate[i]+"' and ToDate ='"+arraytodate[i]+"' and Days = '"+arraydays[i]+"' ");	
-				preparedStmt.executeUpdate();									
+				preparedStmt = con.prepareStatement("Delete from food_truck_tab  where TruckId ='" + TruckId
+						+ "' and FromDate ='" + arrayfromdate[i] + "' and ToDate ='" + arraytodate[i] + "' and Days = '"
+						+ arraydays[i] + "' ");
+				preparedStmt.executeUpdate();
 				break;
-							
+
 			default:
 				System.out.println("Please provide the correct entry");
 				flag = 1;
-				
-				break;		
+
+				break;
 			}
-		}while(flag > 0);
-		
-		
+		} while (flag > 0);
+
 	}
-	
-	public void UpdateTimeslot() throws ClassNotFoundException, SQLException
-	{
+
+	public void UpdateTimeslot() throws ClassNotFoundException, SQLException {
 		String changechoice;
 		String slot;
 		boolean IsNotNumeric;
@@ -129,65 +138,72 @@ public class UpdateTruckSchedule {
 		String timeoption;
 		Scanner Sc = new Scanner(System.in);
 		String choice;
-		
+
 		timeslotnew = "";
-		
+
 		do {
 			IsnotCorrect = false;
 			System.out.println("Please provide the entry number");
 			choice = Sc.next();
 			if (choice.matches("\\d+")) {
-				IsnotCorrect = false;	
+				IsnotCorrect = false;
 				i = Integer.parseInt(choice);
-			 										
+
 			} else {
 				System.out.println("You have entered a wrong choice");
 				IsnotCorrect = true;
 				continue;
 			}
-		
-			System.out.println("Please enter D to delete timeslot or A to add timeslot or L to change the location for timeslot :");
+
+			System.out.println(
+					"\nPlease enter D to delete timeslot or A to add/Change timeslot or L to change the location for timeslot :");
 			changechoice = Sc.next();
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","June1405");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/food_truck_system", "root",
+					"Abhi08338@");
 			PreparedStatement preparedStmt;
 			Statement stmt = con.createStatement();
 			switch (changechoice) {
 			case "D":
-				
+
 				do {
 					System.out.println("Please provide the slot number you want to delete :");
-				slot = Sc.next();
-				if (slot.matches("\\d+")) {
-					IsNotNumeric = false;				
-				 										
-				} else {
-					System.out.println("You have entered a non numeric number");
-					IsNotNumeric = true;
-					continue;
-				}
-								   
-				  
+					slot = Sc.next();
+					if (slot.matches("\\d+")) {
+						IsNotNumeric = false;
+
+					} else {
+						System.out.println("You have entered a non numeric number");
+						IsNotNumeric = true;
+						continue;
+					}
+
 					switch (slot) {
 					case "1":
-					  Sql2 = "UPDATE food_truck_tab SET TimeSlot1 = ' ' , Location1 = ' ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2); 					
-					  break;
+						Sql2 = "UPDATE food_truck_tab SET TimeSlot1 = ' ' , Location1 = ' ' where TruckId ='" + TruckId
+								+ "'  and FromDate ='" + arrayfromdate[i] + "' and ToDate = '" + arraytodate[i]
+								+ "' and Days = '" + arraydays[i] + "'  ";
+						stmt.executeUpdate(Sql2);
+						break;
 					case "2":
-					  Sql2 = "UPDATE food_truck_tab SET TimeSlot2 = ' ' , Location2 = ' ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2);
-					  break;
+						Sql2 = "UPDATE food_truck_tab SET TimeSlot2 = ' ' , Location2 = ' ' where TruckId ='" + TruckId
+								+ "'  and FromDate ='" + arrayfromdate[i] + "' and ToDate = '" + arraytodate[i]
+								+ "' and Days = '" + arraydays[i] + "'  ";
+						stmt.executeUpdate(Sql2);
+						break;
 					case "3":
-					  Sql2 = "UPDATE food_truck_tab SET TimeSlot3 = ' ' , Location3 = ' ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2);
-					  break;
+						Sql2 = "UPDATE food_truck_tab SET TimeSlot3 = ' ' , Location3 = ' ' where TruckId ='" + TruckId
+								+ "'  and FromDate ='" + arrayfromdate[i] + "' and ToDate = '" + arraytodate[i]
+								+ "' and Days = '" + arraydays[i] + "'  ";
+						stmt.executeUpdate(Sql2);
+						break;
 					default:
 						System.out.println("You have entered wrong choice");
-						IsNotNumeric = true;		
-						break;			
-				}				
-										
-				}while(IsNotNumeric);
-				
+						IsNotNumeric = true;
+						break;
+					}
+
+				} while (IsNotNumeric);
+
 				break;
 			case "A":
 				do {
@@ -198,16 +214,16 @@ public class UpdateTruckSchedule {
 					System.out.println("Please enter 3 for slot 18:00 to 22:00");
 					timeoption = Sc.next();
 					slot = timeoption;
-				
+
 					switch (timeoption) {
 					case "1":
-						timeslotnew = "6-10";
+						timeslotnew = "06:00 to 10:00";
 						break;
 					case "2":
-						timeslotnew = "12-16";
+						timeslotnew = "12:00 to 16:00";
 						break;
 					case "3":
-						timeslotnew= "18-22";
+						timeslotnew = "18:00 to 22:00";
 						break;
 					default:
 						IsNotNumeric = true;
@@ -216,107 +232,118 @@ public class UpdateTruckSchedule {
 					}
 				} while (IsNotNumeric);
 				
+				timeslotnew.trim();
 				
-				if ( timeslotnew == arraytimeslot1[i] || timeslotnew == arraytimeslot2[i]) {
+				if (timeslotnew == arraytimeslot1[i] || timeslotnew == arraytimeslot2[i]) {
 					System.out.println("Time Slot already selected before.");
 					IsnotCorrect = true;
 					continue;
 				}
 				System.out.println("Please provide the location :");
 				location = Sc.next();
-		
-					switch (slot) {
-					case "1":
-					  Sql2 = "UPDATE food_truck_tab SET TimeSlot1 = '"+timeslotnew+" ' ,  Location1 = '"+location+" ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2); 					
-					  break;
-					case "2":
-					  Sql2 = "UPDATE food_truck_tab SET TimeSlot2 = '"+timeslotnew+" ' , Location2 = '"+location+" ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2);
-					  break;
-					case "3":
-					  Sql2 = "UPDATE food_truck_tab SET TimeSlot3 = '"+timeslotnew+" ' ,  Location3 = '"+location+" ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2);
-					  break;
-					default:
-						IsnotCorrect = true;
-						System.out.println("You have entered wrong choice");
-						break;			
-				}
+				location.trim();
 				
 				
-				
-				break;
+				switch (slot) {
+				case "1":
+					Sql2 = "UPDATE food_truck_tab SET TimeSlot1 = trim('"+timeslotnew+" ') , Location1 = trim('" +location+ " ') where TruckId ='" + TruckId + "'  and FromDate ='" + arrayfromdate[i]
 							
-			case "L" :
-				do {
-				System.out.println("Please provide the slot number you want to update the location :");
-				slot = Sc.next();
-				
-				if (slot.matches("\\d+")) {
-					IsNotNumeric = false;				
-				 										
-				} else {
-					System.out.println("You have entered a non numeric number");
-					IsNotNumeric = true;
-					continue;
+							+ "' and ToDate = '" + arraytodate[i] + "' and Days = '" + arraydays[i] + "'  ";
+					stmt.executeUpdate(Sql2);
+					break;
+				case "2":
+					Sql2 = "UPDATE food_truck_tab SET TimeSlot2 = trim('"+timeslotnew+" ') , Location2 = trim('" +location+ " ') where TruckId ='" + TruckId + "'  and FromDate ='" + arrayfromdate[i]
+							+ "' and ToDate = '" + arraytodate[i] + "' and Days = '" + arraydays[i] + "'  ";
+					stmt.executeUpdate(Sql2);
+					break;
+				case "3":
+					Sql2 = "UPDATE food_truck_tab SET TimeSlot3 = trim('" +timeslotnew+ " ') ,  Location3 = trim('"+location+" ') where TruckId ='" + TruckId + "'  and FromDate ='" + arrayfromdate[i]
+							+ "' and ToDate = '" + arraytodate[i] + "' and Days = '" + arraydays[i] + "'  ";
+					stmt.executeUpdate(Sql2);
+					break;
+				default:
+					IsnotCorrect = true;
+					System.out.println("You have entered wrong choice");
+					break;
 				}
-				System.out.println("Please provide the location :");
-				location = Sc.next();				   
-			
+
+				break;
+
+			case "L":
+				do {
+					System.out.println("Please provide the slot number you want to update the location :");
+					slot = Sc.next();
+
+					if (slot.matches("\\d+")) {
+						IsNotNumeric = false;
+
+					} else {
+						System.out.println("You have entered a non numeric number");
+						IsNotNumeric = true;
+						continue;
+					}
+					System.out.println("Please provide the location :");
+					location = Sc.next();
+					location.trim();
+
 					switch (slot) {
 					case "1":
-					  Sql2 = "UPDATE food_truck_tab SET  Location1 = '"+location+" ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2); 					
-					  break;
+						Sql2 = "UPDATE food_truck_tab SET  Location1 = trim('" + location + " ') where TruckId ='" + TruckId
+								+ "'  and FromDate ='" + arrayfromdate[i] + "' and ToDate = '" + arraytodate[i]
+								+ "' and Days = '" + arraydays[i] + "'  ";
+						stmt.executeUpdate(Sql2);
+						break;
 					case "2":
-					  Sql2 = "UPDATE food_truck_tab SET  Location2 = '"+location+" ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2);
-					  break;
+						Sql2 = "UPDATE food_truck_tab SET  Location2 = trim('" + location + " ') where TruckId ='" + TruckId
+								+ "'  and FromDate ='" + arrayfromdate[i] + "' and ToDate = '" + arraytodate[i]
+								+ "' and Days = '" + arraydays[i] + "'  ";
+						stmt.executeUpdate(Sql2);
+						break;
 					case "3":
-					  Sql2 = "UPDATE food_truck_tab SET  Location3 = '"+location+" ' where TruckId ='"+ TruckId+"'  and FromDate ='"+arrayfromdate[i]+"' and ToDate = '"+arraytodate[i]+"' and Days = '"+arraydays[i]+"'  ";
-					  stmt.executeUpdate(Sql2);
-					  break;
+						Sql2 = "UPDATE food_truck_tab SET  Location3 = trim('" + location + " ') where TruckId ='" + TruckId
+								+ "'  and FromDate ='" + arrayfromdate[i] + "' and ToDate = '" + arraytodate[i]
+								+ "' and Days = '" + arraydays[i] + "'  ";
+						stmt.executeUpdate(Sql2);
+						break;
 					default:
 						IsNotNumeric = true;
 						System.out.println("You have entered wrong choice");
-						break;			
-				}				
-										
-				}while(IsNotNumeric);
-				
+						break;
+					}
+
+				} while (IsNotNumeric);
+
 				break;
 			default:
 				System.out.println("You have entered a wrong choice");
 				IsnotCorrect = true;
 				break;
 			}
-			
+
 			System.out.println("Press 1 to continue or 2 to exit ?");
 			startagain = Sc.next();
 			if (startagain.matches("\\d+")) {
-				IsnotCorrect = false;				
-			 										
+				IsnotCorrect = false;
+
 			} else {
 				System.out.println("You have entered a non numeric number");
-				IsnotCorrect= true;
+				IsnotCorrect = true;
 			}
-			
+
 			switch (startagain) {
 			case "1":
-				IsnotCorrect = true;				
+				IsnotCorrect = true;
 				break;
 			case "2":
-			/* goes back to previous call*/
+				/* goes back to previous call */
 				break;
 			default:
 				IsnotCorrect = true;
 				break;
-				}
-			
-		}while(IsnotCorrect);
-		
+			}
+
+		} while (IsnotCorrect);
+
 	}
 
-	
 }
