@@ -31,16 +31,16 @@ import java.util.*;
 			{
 				System.out.println("Truck ID: " +TruckID+ "\n"+
 									"Food Type: " +rs.getString("foodtype") + "\n"+
-										"Dish: " +rs.getString("dish") + "\n"+
-										"Price: " +rs.getString("price") );
+									"Dish: " +rs.getString("dish") + "\n"+
+									"Price: " +rs.getString("price") );
            }
 			boolean isloopneeded;
 			do{
 				System.out.println("MENU" + "\n" +
-										"1. Delete" + "\n" +
-										"2. Change Food Type" + "\n" +
-										"3. Change Dish" + "\n" +
-										"4. Change Price");
+									"1. Delete" + "\n" +
+									"2. Change Food Type" + "\n" +
+									"3. Change Dish" + "\n" +
+									"4. Change Price");
 			choice = scanner.next();
 		
 			isloopneeded = false;
@@ -54,35 +54,35 @@ import java.util.*;
 				}
 				case "2": {
 					String oldAttribute;
-					System.out.println("Please enter the old Food Type :" );
+					System.out.println("Please enter the old Food Type :");
 					oldAttribute = scanner.next();
-					System.out.println("Now provide the new Food Type: " );
+					System.out.println("Now provide the new Food Type: ");
 					FoodType = scanner.next();
 					preparedStmt = con.prepareStatement("update truck_offer_tab set foodtype ='" + FoodType + "' where TruckId ='"+TruckID+"' and FoodType = '" +oldAttribute+"'");	
 					preparedStmt.executeUpdate();
-					System.out.println("Your Details have been sucessfully updated" );
+					System.out.println("Your Details have been sucessfully updated");
 					break;
 				}
 				case "3": {
 					String oldAttribute;
-					System.out.println("Please enter the old dish:" );
+					System.out.println("Please enter the old dish:");
 					oldAttribute = scanner.next();
-					System.out.println("Now provide the new dish: " );
+					System.out.println("Now provide the new dish: ");
 					Dish = scanner.next();
 					preparedStmt = con.prepareStatement("update truck_offer_tab set dish ='" +Dish+ "' where TruckId ='"+TruckID+"' and Dish = '" +oldAttribute+"'");	
 					preparedStmt.executeUpdate();
-					System.out.println("Your Details have been sucessfully updated" );
+					System.out.println("Your Details have been sucessfully updated");
 					break;
 				}
 				case "4": {
 					String oldAttribute;
-					System.out.println("Please enter the old Price" );
+					System.out.println("Please enter the old Price");
 					oldAttribute = scanner.next();
-					System.out.println("Now provide the new Price " );
+					System.out.println("Now provide the new Price ");
 					Price = scanner.next();
 					preparedStmt = con.prepareStatement("update truck_offer_tab set price ='" +TimeSlot+ "' where TruckId ='"+TruckID+"'and Price = '" +oldAttribute+"'");	
 					preparedStmt.executeUpdate();
-					System.out.println("Your Details have been sucessfully updated" );
+					System.out.println("Your Details have been sucessfully updated");
 					break;
 				
 				}
