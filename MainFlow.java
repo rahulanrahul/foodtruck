@@ -8,6 +8,7 @@ import BookAndCheckAppointment.BookAppointment;
 import BookAndCheckAppointment.CheckAppointment;
 import FeedBack.GetFeedback;
 import FeedBack.GiveFeedback;
+import JasperReport.appointmentReport;
 import Offers.AddOffer;
 import Offers.ViewOffer;
 import Registration.ApprovalOfFoodTruck;
@@ -22,9 +23,10 @@ import Updates.UpdateTruckSchedule;
 import menu.UpdateTruckMenu;
 import menu.foodMenu;
 import menu.foodMenuDisplay;
+import net.sf.jasperreports.engine.JRException;
 public class Main {
 	
-	public static void main(String[] args) throws ClassNotFoundException, SQLException 
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, JRException 
 	{	String UserOption;
 		boolean CharacterCheckFlag = false;
 		boolean AdminCharacterCheckFlag = false;
@@ -84,10 +86,11 @@ public class Main {
 								System.out.println("1. Food Truck Registration");
 								System.out.println("2. Enter Food Menu ");
 								System.out.println("3. Update Food Menu ");
-								System.out.println("4. View the Appointment  ");
-								System.out.println("5. Add Food Offers  ");
-								System.out.println("6. View the FeedBack ");
-								System.out.println("7. Update Schedule ");
+								System.out.println("4. Add Food Offers  ");
+								System.out.println("5. Update Schedule ");
+								System.out.println("6. View the Appointment  ");
+								System.out.println("7. View the FeedBack ");
+								System.out.println("8. Print Appointment Report ");
 								System.out.println("0. Exit");
 								TruckOwnerOption = Sc.nextLine();
 								switch(TruckOwnerOption)
@@ -97,30 +100,36 @@ public class Main {
 									FoodtruckRegistration.truckRegistration(LoginPage.NameFromDB);
 									TruckOwnerCharacterCheckFlag = true;
 									break;
-								case "2":foodMenu EnterFoodMenu = new foodMenu();
-										EnterFoodMenu.insertfoodMenu();
-										TruckOwnerCharacterCheckFlag = true;
-										break;
-								case "3":UpdateTruckMenu Updatemenu = new UpdateTruckMenu();
-										 Updatemenu.UpdateFoodMenu();
-										 TruckOwnerCharacterCheckFlag = true;
+								case "2":	foodMenu EnterFoodMenu = new foodMenu();
+											EnterFoodMenu.insertfoodMenu();
+											TruckOwnerCharacterCheckFlag = true;
 											break;
-								case "4":CheckAppointment ViewAppt = new CheckAppointment();
-										ViewAppt.ViewAppointmentdata();
-										TruckOwnerCharacterCheckFlag = true;
-										break;
-								case "5":AddOffer AddFoodOffers = new AddOffer();
-										AddFoodOffers.foodOffer();
-										TruckOwnerCharacterCheckFlag = true;
-										break;
-								case "6":GetFeedback ShowFeedBack = new GetFeedback();
-										ShowFeedBack.FeedbackData();
-										TruckOwnerCharacterCheckFlag = true;
-										break;
-								case "7":UpdateTruckSchedule UpdateSchedule = new UpdateTruckSchedule();
-										UpdateSchedule.UpdateSchedule();
-										TruckOwnerCharacterCheckFlag = true;
-										break;
+								case "3":	UpdateTruckMenu Updatemenu = new UpdateTruckMenu();
+										 	Updatemenu.UpdateFoodMenu();
+										 	TruckOwnerCharacterCheckFlag = true;
+											break;
+								case "4":	AddOffer AddFoodOffers = new AddOffer();
+											AddFoodOffers.foodOffer();
+											TruckOwnerCharacterCheckFlag = true;
+											break;
+								case "5":	UpdateTruckSchedule UpdateSchedule = new UpdateTruckSchedule();
+											UpdateSchedule.UpdateSchedule();
+											TruckOwnerCharacterCheckFlag = true;
+											break;
+								case "6":	CheckAppointment ViewAppt = new CheckAppointment();
+											ViewAppt.ViewAppointmentdata();
+											TruckOwnerCharacterCheckFlag = true;
+											break;
+								
+								case "7":	GetFeedback ShowFeedBack = new GetFeedback();
+											ShowFeedBack.FeedbackData();
+											TruckOwnerCharacterCheckFlag = true;
+											break;
+								case "8":	appointmentReport Report = new appointmentReport();
+											Report.JasperReport();
+											TruckOwnerCharacterCheckFlag = true;
+											break;
+								
 								case "0": 	TruckOwnerCharacterCheckFlag = false;
 											ExitCustomerSearchMenu = true;
 											break;
@@ -148,23 +157,33 @@ public class Main {
 									switch(CustomerChoise)
 									{
 									case "1" :	searchByName SearchFootTruckByName = new searchByName();
-												SearchFootTruckByName.searchName();
+												SelectedTruck=SearchFootTruckByName.searchName();
 												CustomerCharacterCheckFlag = false;
 												break;
 									case "2": 	searchByLocation LocationSearch = new searchByLocation();
 												SelectedTruck = LocationSearch.searchLocation();
 												CustomerCharacterCheckFlag = false;
+												if(SelectedTruck==0) {
+													CustomerCharacterCheckFlag = true;	
+												}
 												break;
 									case "3":	searchByDateAndTime DateTimeSearch = new searchByDateAndTime();
 												SelectedTruck=  DateTimeSearch.searchTime();
 												CustomerCharacterCheckFlag = false;
+												if(SelectedTruck==0) {
+													CustomerCharacterCheckFlag = true;	
+												}
 												break;
 									case "4":	searchByMenu MenuSearch = new searchByMenu();
 												SelectedTruck = MenuSearch.searchMenu();
 												CustomerCharacterCheckFlag = false;
+												if(SelectedTruck==0) {
+													CustomerCharacterCheckFlag = true;	
+												}
 												break;
 									case "0":	CustomerCharacterCheckFlag = false; 
 												ExitCustomerSearchMenu = false;
+												SelectedTruck = 0;
 												break;
 									default :	System.out.println(" No other Characters Allowed ");
 												CustomerCharacterCheckFlag = true;
@@ -180,7 +199,7 @@ public class Main {
 									System.out.println("2.Book Appointment ");
 									System.out.println("3.View Offer ");
 									System.out.println("4.Give Feedback ");
-									System.out.println("0. To Return To Search Options ");
+									System.out.println("0.To Return To Search Options ");
 									String SelectedSubMenu = Sc.nextLine();
 									switch(SelectedSubMenu)
 									{
@@ -216,7 +235,7 @@ public class Main {
 			 		CharacterCheckFlag=true;
 						//System.exit(0);
 				 		break;
-			case "Q":  	System.out.println(" Bye...Bye...");
+			case "Q":  	System.out.println(" Bye...");
 	 					//CharacterCheckFlag=true;
 	 					System.exit(0);
 	 					//break;
@@ -225,7 +244,9 @@ public class Main {
 			 		break;
 			 }
 			} while (CharacterCheckFlag);
-					 
+			 
+			 
+			 
 			 
 	}
 
